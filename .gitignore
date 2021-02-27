@@ -1,0 +1,6 @@
+modelapi-cluster-keypair.pem
+Ignore/
+awscliv2.zip
+*.out
+*.pem
+aws/

@@ -1,0 +1,38 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "innkeepr-analyticsapi",
+            "image": "YOURAWS/innkeepr-analyticsapi",
+            "cpu": 10,
+            "memory": 128,
+            "essential": true,
+            "portMappings":[{
+                "containerPort":8001,
+                "hostPort":8001,
+                "protocol":"tcp"
+                }],
+            "environment": [
+                { "name" : "DB_PASSWORD", "value" : "" },
+                { "name" : "DB_USER", "value" : "" },
+                { "name" : "APPURL", "value" : "" }
+            ],
+            "logConfiguration":{
+                "logDriver":"awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/innkeepr-analyticsapi-logs",
+                    "awslogs-region": "YOURREGION",
+                    "awslogs-stream-prefix":"ecs",
+                    "awslogs-create-group": "true"
+                    }
+                }
+        }
+    ],
+    "family": "innkeepr-analyticsapi",
+    "taskRoleArn":"ecsTaskExecutionRole",
+    "executionRoleArn":"ecsTaskExecutionRole",
+    "networkMode":"bridge",
+    "requiresCompatibilities":["EC2"],
+    "cpu":"128",
+    "memory":"6144"
+
+}

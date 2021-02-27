@@ -1,0 +1,46 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "innkeepr-server",
+            "image": "YOURAWS/innkeepr-server",
+            "cpu": 2048,
+            "memory": 1024,
+            "essential": true,
+            "hostname":"app.innkeepr.ai",
+            "portMappings":[
+                {
+                    "containerPort":3000,
+                    "hostPort":3000,
+                    "protocol":"tcp"
+                },
+                {
+                    "containerPort":3443,
+                    "hostPort":3443,
+                    "protocol":"tcp"
+                }
+                ],
+            "environment": [
+                { "name" : "CLIENT_HOST", "value" : "app.innkeepr.ai" },
+                { "name" : "MONGODB_CONNECTION", "value" : "mongodb+srv://dbAdmin:dbAdmin@innkeepr.hafmd.mongodb.net" }
+            ],
+            "logConfiguration":{
+                "logDriver":"awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/innkeepr-server-logs",
+                    "awslogs-region": "YOURREGION",
+                    "awslogs-stream-prefix":"ecs",
+                    "awslogs-create-group": "true"
+                    }
+                }
+
+        }
+    ],
+    "family": "innkeepr-server",
+    "taskRoleArn":"ecsTaskExecutionRole",
+    "executionRoleArn":"ecsTaskExecutionRole",
+    "networkMode":"bridge",
+    "requiresCompatibilities":["EC2"],
+    "cpu":"2048",
+    "memory":"2048"
+
+}

@@ -1,0 +1,45 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "innkeepr-client",
+            "image": "YOURAWS/innkeepr-client",
+            "cpu": 2048,
+            "memory": 1024,
+            "essential": true,
+            "hostname":"app.innkeepr.ai",
+            "portMappings":[
+                {
+                    "containerPort":80,
+                    "hostPort":80,
+                    "protocol":"tcp"
+                },
+                {
+                    "containerPort":443,
+                    "hostPort":443,
+                    "protocol":"tcp"
+                }
+                ],
+            "environment": [
+                { "name" : "API_URL", "value" : "api.innkeepr.ai:3000" }
+            ],
+            "logConfiguration":{
+                "logDriver":"awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/innkeepr-client-logs",
+                    "awslogs-region": "YOURREGION",
+                    "awslogs-stream-prefix":"ecs",
+                    "awslogs-create-group": "true"
+                    }
+                }
+
+        }
+    ],
+    "family": "innkeepr-client",
+    "taskRoleArn":"ecsTaskExecutionRole",
+    "executionRoleArn":"ecsTaskExecutionRole",
+    "networkMode":"bridge",
+    "requiresCompatibilities":["EC2"],
+    "cpu":"2048",
+    "memory":"2048"
+
+}
