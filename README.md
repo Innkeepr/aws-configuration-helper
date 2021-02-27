@@ -64,10 +64,12 @@ The ***Oeffentlicher IPv4-DNS*** can be found in the container instance of the t
 - innkeepr-analyticsapi: ***Oeffentlicher IPv4-DNS***:***PORT***/docs
 - innkeepr-client: ***Oeffentlicher IPv4-DNS***:80/docs
 
-### Step 7: Stop it
+### Step 7: Stop clusters
+Each cluster has it's own auto scaling group which can be delted. If delted, the instance will stop as well.
+
 EC2 --> Auto Scaling Groups --> Delete
 
-### Step 8: Use EC2 Launch Konfiguration
+### Step 8: Use EC2 Launch Konfiguration to restart clusters
 The setup is saved here automatically, during setting it up choose the according vpc and subnets which were created in Step 4
 
 
