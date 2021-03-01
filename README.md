@@ -1,21 +1,36 @@
 # Set Up Innkeepr
 Steps to set up Innkeepr Sever, Client and AnaltyicsAPI on AWS
 
+### Step : Install Docker
+https://docs.docker.com/get-docker/ 
+
 ### Step 1: Set up AWS
 If the AWS client, docker integration and amazon-ecr-credential-helper does not already exist run 
 > sh install-prerequisites.sh
 
-
 ### Step 2: Set up Docker Credentials
-Open docker config file: cat ~/.docker/config.json & add in config.json Innkepr ID:
+#### Linux
+Open docker config file: 
+> cat ~/.docker/config.json 
+- add in config.json Innkepr ID:
 ```json
 {
-    "credHelpers":
-    {
+    "credHelpers": {
+		"663925627205.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
+	},
+	"credHelpers": {
         "576891989037.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
-    } 
+       } 
 }
 ```
+#### Windows
+TO DO: Windows & MAC
+
+#### OS
+To access it go to the Docker Icon > Preferences > Docker Engine 
+
+
+TO DO: Windows & MAC
 
 ### Step 3: Create keypair file
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
@@ -23,6 +38,7 @@ https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyP
 Save the keypair file in the folder of Innkeepr-ClientAccess
 
 ### Step 4: Set up Innkeepr
+In Innkeepr-ClientAccess
 Preparation:
 - check on AWS that you are allowed to add three new vpcs (other wise an error message will occur like "The maximum number of internet gateways has been reached"). By default 5 VPCs per region are allowed.
     - AWS Console --> VPC --> VPC Dashboard
@@ -81,8 +97,6 @@ The setup is saved here automatically, during setting it up choose the according
         2. choose Cluster Role (see your EC2 --> instances --> IAM Role is listed here)
         3. add policy as in https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1
 
- # TO DO
-- remove variables from client-aws-setup
-- remove variables form json tasks
-- test pull image from my account with willis access
-- test if my image can run on smaller server --> long term
+
+### TO DO
+- set up script aws cli für mac und linux

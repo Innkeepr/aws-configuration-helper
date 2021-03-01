@@ -11,7 +11,8 @@ KEYPAIR=INSERT_YOUR_KEYPAIR
 
 # login to ecr
 ##############
-aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin $AWS_ID
+aws ecr get-login-password --region $ECS_REGION
+sudo docker login --username AWS --password-stdin $AWS_ID
 
 # pull docker images
 ##########################
