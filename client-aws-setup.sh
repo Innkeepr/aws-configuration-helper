@@ -16,7 +16,7 @@ aws ecr get-login-password --region $ECS_REGION | sudo docker login --username A
 sudo docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
 
 # login to ecr and pull innkeepr server images
-##########################
+##############################################
 echo -n "Pull innkeepr-server and client images"
 aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin 663925627205.dkr.ecr.eu-central-1.amazonaws.com
 echo -n "Pull innkeepr-client"
@@ -51,6 +51,8 @@ echo -n "Create Cluster: innkeepr-client"
 ecs-cli up --force --capability-iam --instance-type t3.large --image-id ami-0e781777db20a4f7f --launch-type EC2 --cluster ecs-cluster-innkeepr-client --region $ECS_REGION --keypair $KEYPAIR --port 22
 echo -n "Create Cluster: innkeepr-server"
 ecs-cli up --force --capability-iam --instance-type t3.large --image-id ami-0e781777db20a4f7f --launch-type EC2 --cluster ecs-cluster-innkeepr-server --region $ECS_REGION --keypair $KEYPAIR --port 22
+echo -n "Sleep for 60 seconds to create instances"
+sleep 60
 
 # create task defintion
 #######################

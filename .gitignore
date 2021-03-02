@@ -4,3 +4,4 @@ awscliv2.zip
 *.out
 *.pem
 aws/
+ecs-cli.asc

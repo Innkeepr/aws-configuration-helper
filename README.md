@@ -12,7 +12,7 @@ https://docs.docker.com/get-docker/
 ### Step 2: Create keypair file
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
 
-Save the keypair file in the folder of Innkeepr-ClientAccess
+Save the keypair file in the folder of aws-configuration-helper
 
 ### Step 3: Allow the creation of logs in IAM Role
 1. go to IAM Roles and open Roles
@@ -73,7 +73,7 @@ Open docker config file:
 }
 ```
 ### Step 6: Set up Innkeepr
-In Innkeepr-ClientAccess
+In aws-configuration-helper
 Preparation:
 - check on AWS that you are allowed to add three new vpcs (other wise an error message will occur like "The maximum number of internet gateways has been reached"). By default 5 VPCs per region are allowed.
     - AWS Console --> VPC --> VPC Dashboard
@@ -129,15 +129,17 @@ EC2 --> Auto Scaling Groups --> Delete
 ### Step 10: Use EC2 Launch Konfiguration to restart clusters
 The setup is saved here automatically, during setting it up choose the according vpc and subnets which were created in Step 4
 
+---------------------------------------------------------
+
 ## B. Set Up Innkeepr on AWS Ubuntu Instance
 
-### Step 2: Create AWS keypair file: 
-name: innkeepr-keypair
-https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
+### Step 1: Create AWS keypair file:
+Go to https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs: and create a keypair
+- name: innkeepr-keypair
 
-Save the keypair file in the folder of Innkeepr-ClientAccess
+Save the keypair.
 
-### Step : Create AWS Instance
+### Step 2: Create AWS Instance
 1. Go to AWS --> EC2 --> Instances --> Instance starten
 2. Schritt 1: Instance auswählen: Search for "Ubuntu Server 20.04 LTS" and choose it
 3. Schritt 2: Wählen eines Instance-Typs: t2.micro
@@ -156,12 +158,38 @@ Save the keypair file in the folder of Innkeepr-ClientAccess
   - choose the above created key pair file
   - click on Starten der Instance
 
-### Step : Connect to Instance
-TO DO
+### Step 3: Connect to Instance
+#### Linux
+- open the terminal and go to the folder of the keypair of Step 1
+- open AWS console in Browser --> EC2 --> go to instance which was generated in Step 2 --> click on verbinden --> execute the commands to connect to the instance
 
-Now you should be on your AWS Instance. The next steps has to be executed on this instance
+#### Windows
+1. Install Putty: https://www.chiark.greenend.org.uk/~sgtatham/putty/
+2. Open PuttyGen
+  - Parameters: Type of key to generate: RSA
+  - Load File
+    - choose all files
+    - load your keypair .pem file
+  - Save private key
+  - Name it as the pem file
+  - Close PutyGen
+3. Open Putty
+  - Category → Session
+    - Host Name → DNS Puplic Hostname of the instance, e.g. my-instance-user-name@my-instance-public-dns-name
+    - Port: 22
+    - Connection type: SSH
+    - Saved Session: Innkeepr → Save
+  - Extend Connection → SSH -> Choose Auth → Browse
+    - Select ppk file 
+  - Click on Open
+  - Putty Security Alert → Choose yes
+  - In Terminal login as: ubuntu
 
-### Step : Clone Innkeepr-ClientAccess
+Ausführlich: https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/putty.html 
+
+***Now you should be on your AWS Instance. The next steps has to be executed on this instance***
+
+### Step 4: Clone aws-configuration-helper
 > git clone https://github.com/Innkeepr/aws-configuration-helper.git
 
 - go into folder aws-configuration-helper/
@@ -170,7 +198,7 @@ Now you should be on your AWS Instance. The next steps has to be executed on thi
 - copy keypair file from your local machine to instance. YOURACCESS can be found in AWS --> EC2 --> Instance --> Choose the instance --> use Öffentlicher IPv4-DNS
 > scp -i innkeepr-keypair.pem innkeepr-keypair.pem ubuntu@ec2-**YOURACCESS**.eu-central-1.compute.amazonaws.com:/home/ubuntu/aws-configuration-helper
 
-### Step : Install prerequisites for AWS
+### Step 5: Install prerequisites for AWS
 > sudo sh install-prerequisites.sh
 
 To enter during the process:
@@ -184,7 +212,7 @@ To enter during the process:
   - Choose "An Existing AWS Profile"
   - default
   
-### Step : Set up Docker Credentials
+### Step 6: Set up Docker Credentials
 Open docker config file: 
 - > cat ~/.docker/config.json 
 
@@ -210,8 +238,8 @@ Insert the json script to the ~/.docker/config.json file & save it:
 ```
 - STRG+X --> save Yes
 
-### Step : Set up Innkeepr Variables
-In Innkeepr-ClientAccess
+### Step 7: Set up Innkeepr Variables
+In aws-configuration-helper
 Preparation:
 - check on AWS that you are allowed to add three new vpcs (other wise an error message will occur like "The maximum number of internet gateways has been reached"). By default 5 VPCs per region are allowed.
     - AWS Console --> VPC --> VPC Dashboard
@@ -235,7 +263,7 @@ Preparation:
 - innkeepr-server-task.json
   > nano innkeepr-server-task.json
 
-### Step : Set up Innkeepr Clusters
+### Step 8: Set up Innkeepr Clusters
 
 Run the script which will pull, push image, create clusters and create and run task:
 > sudo sh client-aws-setup.sh $>client-aws-setup.out
