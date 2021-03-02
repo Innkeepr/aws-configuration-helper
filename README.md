@@ -1,6 +1,8 @@
 # Set Up Innkeepr
 Steps to set up Innkeepr Sever, Client and AnaltyicsAPI on AWS. There are two ways:
+
 A. Locally on a linux system
+
 B. Ona an AWS ubunt system
 
 ## A: Set up Innkeepr on a local linux instance
