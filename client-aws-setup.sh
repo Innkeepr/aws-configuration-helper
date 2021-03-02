@@ -9,15 +9,16 @@ ECS_REGION=INSERT_YOUR_REGION
 #e.g. modelapi-cluster-keypair (without ending)
 KEYPAIR=INSERT_YOUR_KEYPAIR
 
-# login to ecr
-##############
-echo -n "Login to ECR"
-aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin $AWS_ID
-
-# pull docker images
-##########################
+# login to ecr and pull api images
+##################################
 echo -n "Pull innkeepr-analyticsapi"
+aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin 576891989037.dkr.ecr.eu-central-1.amazonaws.com
 sudo docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
+
+# login to ecr and pull innkeepr server images
+##########################
+echo -n "Pull innkeepr-server and client images"
+aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin 663925627205.dkr.ecr.eu-central-1.amazonaws.com
 echo -n "Pull innkeepr-client"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client
 echo -n "Pull innkeepr-server"

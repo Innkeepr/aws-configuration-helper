@@ -131,7 +131,8 @@ The setup is saved here automatically, during setting it up choose the according
 
 ## B. Set Up Innkeepr on AWS Ubuntu Instance
 
-### Step 2: Create AWS keypair file
+### Step 2: Create AWS keypair file: 
+name: innkeepr-keypair
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
 
 Save the keypair file in the folder of Innkeepr-ClientAccess
@@ -161,16 +162,16 @@ TO DO
 Now you should be on your AWS Instance. The next steps has to be executed on this instance
 
 ### Step : Clone Innkeepr-ClientAccess
-git clone https://github.com/Innkeepr/Innkeepr-ClientAccess.git
-- Enter your user name and pasword when necessary (to do: public or with access?)
-- go into folder Innkeepr-ClientAccess
-> cd Innkeepr-ClientAccess/
+> git clone https://github.com/Innkeepr/aws-configuration-helper.git
+
+- go into folder aws-configuration-helper/
+> cd aws-configuration-helper/
 
 - copy keypair file from your local machine to instance. YOURACCESS can be found in AWS --> EC2 --> Instance --> Choose the instance --> use Öffentlicher IPv4-DNS
-> scp -i modelapi-cluster-keypair.pem modelapi-cluster-keypair.pem ubuntu@ec2-**YOURACCESS**.eu-central-1.compute.amazonaws.com:/home/ubuntu/Innkeepr-ClientAccess
+> scp -i innkeepr-keypair.pem innkeepr-keypair.pem ubuntu@ec2-**YOURACCESS**.eu-central-1.compute.amazonaws.com:/home/ubuntu/aws-configuration-helper
 
 ### Step : Install prerequisites for AWS
-> sh install-prerequisites.sh
+> sudo sh install-prerequisites.sh
 
 To enter during the process:
 1. [sudo] Passort fuer username: Enter your sudo password
@@ -180,17 +181,18 @@ To enter during the process:
   - Default region name: enter your region, e.g. eu-central-1
   - Default output format [json]: json
 3. Create Docker Context
-  - Choose "AWS secret and token credentials"
-  - AWS Access Key ID: Enter AWS Access Key
-  - AWS Secret Access key ID: Enter AWS Secret Access Key
-  - Region: choose your region (as above)
+  - Choose "An Existing AWS Profile"
+  - default
   
 ### Step : Set up Docker Credentials
 Open docker config file: 
 - > cat ~/.docker/config.json 
 
 If the file does not exist , create the file
-- > touch ~/.docker/config.json 
+- > touch ~/.docker/config.json
+
+If it ~/.docker/ does not exist run and then try againg the touch command
+> sudo apt install amazon-ecr-credential-helper
 
 Insert the json script to the ~/.docker/config.json file & save it:
 - open file with nano editor
@@ -252,8 +254,4 @@ This script set up the pulls and push the necessary images and set up the cluste
         3. add policy as in https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1
 
 
-### TO DO
-- set up script aws cli für mac und linux
-- Ausgaben einfügen für den Kunden, um Irittierungen vermeiden
-- Install ecs-cli https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
 
