@@ -20,8 +20,9 @@
                 }
                 ],
             "environment": [
-                { "name" : "CLIENT_HOST", "value" : "app.innkeepr.ai" },
-                { "name" : "MONGODB_CONNECTION", "value" : "mongodb+srv://pendix:NCrmxpd1rIIkKpsh@innkeepr-production.hafmd.mongodb.net" }
+                { "name" : "CLIENT_URL", "value" : "app.innkeepr.ai" },
+                { "name" : "MONGO_URL", "value" : "mongodb+srv://pendix:NCrmxpd1rIIkKpsh@innkeepr-production.hafmd.mongodb.net" },
+                { "name" : "ANALYTICS_URL", "value" : "http://localhost:8001/"}
             ],
             "logConfiguration":{
                 "logDriver":"awslogs",

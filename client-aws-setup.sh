@@ -33,6 +33,7 @@ aws ecr create-repository --repository-name innkeepr-server
 
 # tag and push image (server)
 ####################
+aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin $AWS_ID
 #echo -n "Push Image: innkeepr-analytics"
 #docker tag 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi $AWS_ID/innkeepr-analyticsapi:latest
 #docker push $AWS_ID/innkeepr-analyticsapi:latest
