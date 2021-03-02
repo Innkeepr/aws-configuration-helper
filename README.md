@@ -135,11 +135,43 @@ The setup is saved here automatically, during setting it up choose the according
 
 ## B. Set Up Innkeepr on AWS Ubuntu Instance
 
-### Step 1: Create AWS keypair file:
+### Step 1: Set Up AWS
+#### Create AWS keypair file:
 Go to https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs: and create a keypair
 - name: innkeepr-keypair
 
 Save the keypair.
+
+#### Allow the creation of logs in IAM Role
+1. go to IAM Roles and open Roles
+2. choose ecsTaskExecutionRole
+3. Richtlinie anfügen
+4. Richtlinie erstellen (Details see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1)
+5. Open Tab Json and insert
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+    ],
+      "Resource": [
+        "*"
+    ]
+  }
+ ]
+}
+```
+6. Name, e.g. **innkeepr-policy-taks-role**
+7. Richtlinie erstellen
+8. Öffne wieder ecsTaskExecutionRole
+9. Klicke auf Richtlinie anfügen
+10. Suche nach der oben erstellen Richtlinie und füge sie an
 
 ### Step 2: Create AWS Instance
 1. Go to AWS --> EC2 --> Instances --> Instance starten
@@ -155,8 +187,8 @@ Save the keypair.
 6. Schritt 5: Tags hinzufügen --> click on next
 7. Schritt 6: Configure Security Group
 8. Schritt 7: Überprüfen des Instance-Starts --> click on Starten
-  - choose the above created key pair file
-  - click on Starten der Instance
+    - choose the above created key pair file
+    - click on Starten der Instance
 
 ### Step 3: Connect to Instance
 #### Linux
@@ -219,7 +251,7 @@ Open docker config file:
 If the file does not exist , create the file
 - > touch ~/.docker/config.json
 
-If it ~/.docker/ does not exist run and then try againg the touch command
+If the directory ~/.docker/ does not exist run the underneath command and then try againg the touch command
 > sudo apt install amazon-ecr-credential-helper
 
 Insert the json script to the ~/.docker/config.json file & save it:
@@ -273,7 +305,7 @@ This script set up the pulls and push the necessary images and set up the cluste
  - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
  - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
 
- Step 7: Set up security groups
+### Step 10: Set up security groups
  - innkeepr-analtycsapi Port 8001:
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 8001 --cidr ***cidr-address*** --region ***your-region***
    - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
@@ -291,17 +323,17 @@ This script set up the pulls and push the necessary images and set up the cluste
     - Ports 3000-3443
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 3000-3443 --cidr ***cidr-address*** --region ***your-region***
 
-### Step 10: Now you can connect to API
+### Step 11: Now you can connect to API
 The ***Oeffentlicher IPv4-DNS*** can be found in the container instance of the task running in the certain cluster, e.g. for the innkeepr-client task: AWS console --> ECR --> Clusters --> ecs-cluster-innkeepr-client  --> Tab Task --> Container Instance --> Public DNS
 - innkeepr-analyticsapi: ***Oeffentlicher IPv4-DNS***:***PORT***/docs
 - innkeepr-client: ***Oeffentlicher IPv4-DNS***:80/docs
 
-### Step 11: Stop clusters
+### Step 12: Stop clusters
 Each cluster has it's own auto scaling group which can be delted. If delted, the instance will stop as well.
 
 EC2 --> Auto Scaling Groups --> Delete
 
-### Step 12: Use EC2 Launch Konfiguration to restart clusters
+### Step 13: Use EC2 Launch Konfiguration to restart clusters
 The setup is saved here automatically, during setting it up choose the according vpc and subnets which were created in Step 4
 
 ## Handling Error Messages
