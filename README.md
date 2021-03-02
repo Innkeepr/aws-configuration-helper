@@ -246,7 +246,7 @@ If the file does not exist , create the file
 - > touch ~/.docker/config.json
 
 If the directory ~/.docker/ does not exist run the underneath command and then try againg the touch command
-> sudo apt install amazon-ecr-credential-helper
+> mkdir ~/.docker/
 
 Insert the json script to the ~/.docker/config.json file & save it:
 - open file with nano editor
