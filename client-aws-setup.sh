@@ -3,14 +3,11 @@
 ts=$(date +%d-%m-%Y_%H-%M-%S)
 pt="docker-innkeepr-server-$ts"
 # Insert your AWS ID, e.g. AWSID.dkr.ecr.eu-central-1.amazonaws.com
-AWS_ID=576891989037.dkr.ecr.eu-central-1.amazonaws.com
-#INSERT_YOUR_AWS
+AWS_ID=INSERT_YOUR_AWS
 #e.g. eu-central-1
-ECS_REGION=eu-central-1
-#INSERT_YOUR_REGION
+ECS_REGION=INSERT_YOUR_REGION
 #e.g. modelapi-cluster-keypair (without ending)
-KEYPAIR=modelapi-cluster-keypair
-#INSERT_YOUR_KEYPAIR
+KEYPAIR=INSERT_YOUR_KEYPAIR
 
 # login to ecr
 ##############
@@ -20,11 +17,11 @@ aws ecr get-login-password --region $ECS_REGION | sudo docker login --username A
 # pull docker images
 ##########################
 echo -n "Pull innkeepr-analyticsapi"
-docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
+sudo docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
 echo -n "Pull innkeepr-client"
-docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client
+sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client
 echo -n "Pull innkeepr-server"
-docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server
+sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server
 
 # create repository on aws
 ##########################

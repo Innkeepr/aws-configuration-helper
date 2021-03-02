@@ -44,4 +44,7 @@ gpg --keyserver hkp://keys.gnupg.net --recv BCE9D9A42D51784F
 curl -Lo ecs-cli.asc https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest.asc
 sudo chmod +x /usr/local/bin/ecs-cli
 ecs-cli --version
+sudo apt update
+
+
 

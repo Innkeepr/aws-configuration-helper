@@ -97,7 +97,6 @@ This script set up the pulls and push the necessary images and set up the cluste
  - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
  - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
 
- Note: May save the cluster outputs vpc, subnets and security groups
 
 ### Step 7: Set up security groups
  - innkeepr-analtycsapi Port 8001:
@@ -132,7 +131,7 @@ The setup is saved here automatically, during setting it up choose the according
 
 ## B. Set Up Innkeepr on AWS Ubuntu Instance
 
-### Step 2: Create keypair file
+### Step 2: Create AWS keypair file
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
 
 Save the keypair file in the folder of Innkeepr-ClientAccess
@@ -144,17 +143,105 @@ Save the keypair file in the folder of Innkeepr-ClientAccess
 4. Schritt 3: Konfigurieren von Instance-Details
   - Netzwerk: Choose a VPC or create a new one
   - Subnetz: Choose a subnet
+  - Öffentliche IP automatisch zuweisen: Aktivieren
   - IAM Rolle: Choose ecsInstanceRole
   - click on Next
 5. Schritt 4: Speicher hinzufügen --> click on next
 6. Schritt 5: Tags hinzufügen --> click on next
-7. Schritt 6: Configure Security Group --> Next (TO DO: SG Regel)
+7. Schritt 6: Configure Security Group
+  - Regeln für ausgehenden Datenverkehr hinzufügen (damit Images gepullt werden können):
+  TO DO ?: Typ: HTTPS  Zieladresse: 0.0.0.0/0
 8. Schritt 7: Überprüfen des Instance-Starts --> click on Starten
   - choose the above created key pair file
   - click on Starten der Instance
 
 ### Step : Connect to Instance
 TO DO
+
+Now you should be on your AWS Instance. The next steps has to be executed on this instance
+
+### Step : Clone Innkeepr-ClientAccess
+git clone https://github.com/Innkeepr/Innkeepr-ClientAccess.git
+- Enter your user name and pasword when necessary (to do: public or with access?)
+- go into folder Innkeepr-ClientAccess
+> cd Innkeepr-ClientAccess/
+
+- copy keypair file from your local machine to instance. YOURACCESS can be found in AWS --> EC2 --> Instance --> Choose the instance --> use Öffentlicher IPv4-DNS
+> scp -i modelapi-cluster-keypair.pem modelapi-cluster-keypair.pem ubuntu@ec2-**YOURACCESS**.eu-central-1.compute.amazonaws.com:/home/ubuntu/Innkeepr-ClientAccess
+
+### Step : Install prerequisites for AWS
+> sh install-prerequisites.sh
+
+To enter during the process:
+1. [sudo] Passort fuer username: Enter your sudo password
+2. Configure AWS
+  - AWS Access Key ID [********************]: Enter your AWS Key ID
+  - AWS Secret Access Key [*******************]:  Enter your AWS Secret Access Key
+  - Default region name: enter your region, e.g. eu-central-1
+  - Default output format [json]: json
+3. Create Docker Context
+  - Choose "AWS secret and token credentials"
+  - AWS Access Key ID: Enter AWS Access Key
+  - AWS Secret Access key ID: Enter AWS Secret Access Key
+  - Region: choose your region (as above)
+  
+### Step : Set up Docker Credentials
+Open docker config file: 
+- > cat ~/.docker/config.json 
+
+If the file does not exist , create the file
+- > touch ~/.docker/config.json 
+
+Insert the json script to the ~/.docker/config.json file & save it:
+- open file with nano editor
+> nano ~/.docker/config.json
+- copy this to the empty file
+```json
+{
+    "credHelpers": {
+		"663925627205.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
+	},
+	"credHelpers": {
+        "576891989037.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
+       } 
+}
+```
+- STRG+X --> save Yes
+
+### Step : Set up Innkeepr Variables
+In Innkeepr-ClientAccess
+Preparation:
+- check on AWS that you are allowed to add three new vpcs (other wise an error message will occur like "The maximum number of internet gateways has been reached"). By default 5 VPCs per region are allowed.
+    - AWS Console --> VPC --> VPC Dashboard
+- add variable names to client-aws-setup.sh file
+
+> nano client-aws-setup.sh
+
+    - include your AWSid at the top: INSERT_YOUR_AWS
+    - define your AWS region: INSERT_YOUR_REGION
+    - define your AWS keypair file (which your created above): INSERT_YOUR_KEYPAIR 
+- innkeepr-analyticsapi-task.json
+  > nano innkeepr-analyticsapi-task.json
+  - "image": Insert YOURAWS, e.g. YOURAWS=***AWSID.dkr.ecr.REGION.amazonaws.com/***
+  - define your "awslogs-region", e.g. eu-central-1
+  - STRG+X
+  - Save -> Y
+
+  Do the same for: 
+- innkeepr-client-task.json
+  > nano innkeepr-client-task.json
+- innkeepr-server-task.json
+  > nano innkeepr-server-task.json
+
+### Step : Set up Innkeepr Clusters
+
+Run the script which will pull, push image, create clusters and create and run task:
+> sudo sh client-aws-setup.sh $>client-aws-setup.out
+
+This script set up the pulls and push the necessary images and set up the clusters and the according tasks:
+ - cluster: ecs-cluster-innkeepr-analyticsapi & task: innkeepr-analyticsapi
+ - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
+ - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
 
 ## Handling Error Messages
 - Update instance: see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html
