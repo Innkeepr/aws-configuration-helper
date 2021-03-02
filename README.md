@@ -152,8 +152,6 @@ Save the keypair.
 5. Schritt 4: Speicher hinzufügen --> click on next
 6. Schritt 5: Tags hinzufügen --> click on next
 7. Schritt 6: Configure Security Group
-  - Regeln für ausgehenden Datenverkehr hinzufügen (damit Images gepullt werden können):
-  TO DO ?: Typ: HTTPS  Zieladresse: 0.0.0.0/0
 8. Schritt 7: Überprüfen des Instance-Starts --> click on Starten
   - choose the above created key pair file
   - click on Starten der Instance
@@ -263,7 +261,7 @@ Preparation:
 - innkeepr-server-task.json
   > nano innkeepr-server-task.json
 
-### Step 8: Set up Innkeepr Clusters
+### Step 9: Set up Innkeepr Clusters
 
 Run the script which will pull, push image, create clusters and create and run task:
 > sudo sh client-aws-setup.sh $>client-aws-setup.out
@@ -272,6 +270,37 @@ This script set up the pulls and push the necessary images and set up the cluste
  - cluster: ecs-cluster-innkeepr-analyticsapi & task: innkeepr-analyticsapi
  - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
  - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
+
+ Step 7: Set up security groups
+ - innkeepr-analtycsapi Port 8001:
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 8001 --cidr ***cidr-address*** --region ***your-region***
+   - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
+
+ - innkeepr-client:
+    - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
+    - Port 80:
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 80 --cidr ***cidr-address*** --region ***your-region***
+    - Port 443:
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 443 --cidr ***cidr-address*** --region ***your-region***
+
+ - innkeepr-server
+    - Port 80:
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 80 --cidr ***cidr-address*** --region ***your-region***
+    - Ports 3000-3443
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 3000-3443 --cidr ***cidr-address*** --region ***your-region***
+
+### Step 10: Now you can connect to API
+The ***Oeffentlicher IPv4-DNS*** can be found in the container instance of the task running in the certain cluster, e.g. for the innkeepr-client task: AWS console --> ECR --> Clusters --> ecs-cluster-innkeepr-client  --> Tab Task --> Container Instance --> Public DNS
+- innkeepr-analyticsapi: ***Oeffentlicher IPv4-DNS***:***PORT***/docs
+- innkeepr-client: ***Oeffentlicher IPv4-DNS***:80/docs
+
+### Step 11: Stop clusters
+Each cluster has it's own auto scaling group which can be delted. If delted, the instance will stop as well.
+
+EC2 --> Auto Scaling Groups --> Delete
+
+### Step 12: Use EC2 Launch Konfiguration to restart clusters
+The setup is saved here automatically, during setting it up choose the according vpc and subnets which were created in Step 4
 
 ## Handling Error Messages
 - Update instance: see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html
