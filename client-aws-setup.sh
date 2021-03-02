@@ -11,9 +11,9 @@ KEYPAIR=INSERT_YOUR_KEYPAIR
 
 # login to ecr and pull api images
 ##################################
-echo -n "Pull innkeepr-analyticsapi"
-aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin 576891989037.dkr.ecr.eu-central-1.amazonaws.com
-sudo docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
+#echo -n "Pull innkeepr-analyticsapi"
+#aws ecr get-login-password --region $ECS_REGION | sudo docker login --username AWS --password-stdin 576891989037.dkr.ecr.eu-central-1.amazonaws.com
+#sudo docker pull 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi
 
 # login to ecr and pull innkeepr server images
 ##############################################
@@ -27,15 +27,15 @@ sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server
 # create repository on aws
 ##########################
 echo -n "Creatre repsoitories"
-aws ecr create-repository --repository-name innkeepr-analyticsapi
+#aws ecr create-repository --repository-name innkeepr-analyticsapi
 aws ecr create-repository --repository-name innkeepr-client
 aws ecr create-repository --repository-name innkeepr-server
 
 # tag and push image (server)
 ####################
-echo -n "Push Image: innkeepr-analytics"
-docker tag 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi $AWS_ID/innkeepr-analyticsapi:latest
-docker push $AWS_ID/innkeepr-analyticsapi:latest
+#echo -n "Push Image: innkeepr-analytics"
+#docker tag 576891989037.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analyticsapi $AWS_ID/innkeepr-analyticsapi:latest
+#docker push $AWS_ID/innkeepr-analyticsapi:latest
 echo -n "Push Image: innkeepr-client"
 docker tag 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client $AWS_ID/innkeepr-client:latest
 docker push $AWS_ID/innkeepr-client:latest
@@ -45,8 +45,8 @@ docker push $AWS_ID/innkeepr-server:latest
 
 # create cluster
 ####################
-echo -n "Create Cluster: cluster innkeepr-analyticsapi"
-ecs-cli up --force --capability-iam --instance-type m5n.large --image-id ami-0009a0c29a961a36f --launch-type EC2 --cluster ecs-cluster-innkeepr-analyticsapi --region $ECS_REGION --keypair $KEYPAIR --port 22
+#echo -n "Create Cluster: cluster innkeepr-analyticsapi"
+#ecs-cli up --force --capability-iam --instance-type m5n.large --image-id ami-0009a0c29a961a36f --launch-type EC2 --cluster ecs-cluster-innkeepr-analyticsapi --region $ECS_REGION --keypair $KEYPAIR --port 22
 echo -n "Create Cluster: innkeepr-client"
 ecs-cli up --force --capability-iam --instance-type t3.large --image-id ami-0e781777db20a4f7f --launch-type EC2 --cluster ecs-cluster-innkeepr-client --region $ECS_REGION --keypair $KEYPAIR --port 22
 echo -n "Create Cluster: innkeepr-server"
@@ -56,8 +56,8 @@ sleep 60
 
 # create task defintion
 #######################
-echo -n "Create Task: cluster innkeepr-analyticsapi"
-aws ecs register-task-definition --cli-input-json file://innkeepr-analyticsapi-task.json
+#echo -n "Create Task: cluster innkeepr-analyticsapi"
+#aws ecs register-task-definition --cli-input-json file://innkeepr-analyticsapi-task.json
 echo -n "Create Task: cluster innkeepr-client"
 aws ecs register-task-definition --cli-input-json file://innkeepr-client-task.json
 echo -n "Create Task: cluster innkeepr-server"
@@ -66,8 +66,8 @@ aws ecs register-task-definition --cli-input-json file://innkeepr-server-task.js
 
 # execute tasks in the according cluster
 ########################################
-echo -n "Run Task: cluster innkeepr-analyticsapi"
-aws ecs run-task --cluster ecs-cluster-innkeepr-analyticsapi --task-definition innkeepr-analyticsapi --count 1 --launch-type EC2
+#echo -n "Run Task: cluster innkeepr-analyticsapi"
+#aws ecs run-task --cluster ecs-cluster-innkeepr-analyticsapi --task-definition innkeepr-analyticsapi --count 1 --launch-type EC2
 echo -n "Run Task: cluster innkeepr-client"
 aws ecs run-task --cluster ecs-cluster-innkeepr-client --task-definition innkeepr-client --count 1 --launch-type EC2
 echo -n "Run Task: cluster innkeepr-server"

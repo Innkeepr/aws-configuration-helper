@@ -83,7 +83,7 @@ Preparation:
     - include your AWSid at the top
     - define your AWS region
     - define your AWS keypair file
-- innkeepr-analyticsapi-task.json & innkeepr-client-task.json & innkeepr-server-task.json
+- innkeepr-client-task.json & innkeepr-server-task.json
     - "image": your link to repository
     - define your "awslogs-region"
 
@@ -95,16 +95,11 @@ or with sudo (depends on your sh set up)
 > sudo sh client-aws-setup.sh $>client-aws-setup.out
 
 This script set up the pulls and push the necessary images and set up the clusters and the according tasks:
- - cluster: ecs-cluster-innkeepr-analyticsapi & task: innkeepr-analyticsapi
  - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
  - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
 
 
 ### Step 7: Set up security groups
- - innkeepr-analtycsapi Port 8001:
-   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 8001 --cidr ***cidr-address*** --region ***your-region***
-   - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
-
  - innkeepr-client:
     - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
     - Port 80:
@@ -120,7 +115,6 @@ This script set up the pulls and push the necessary images and set up the cluste
 
 ### Step 8: Now you can connect to API
 The ***Oeffentlicher IPv4-DNS*** can be found in the container instance of the task running in the certain cluster, e.g. for the innkeepr-client task: AWS console --> ECR --> Clusters --> ecs-cluster-innkeepr-client  --> Tab Task --> Container Instance --> Public DNS
-- innkeepr-analyticsapi: ***Oeffentlicher IPv4-DNS***:***PORT***/docs
 - innkeepr-client: ***Oeffentlicher IPv4-DNS***:80/docs
 
 ### Step 9: Stop clusters
@@ -282,16 +276,14 @@ Preparation:
     - include your AWSid at the top: INSERT_YOUR_AWS
     - define your AWS region: INSERT_YOUR_REGION
     - define your AWS keypair file (which your created above): INSERT_YOUR_KEYPAIR 
-- innkeepr-analyticsapi-task.json
-  > nano innkeepr-analyticsapi-task.json
+- innkeepr-client-task.json
+  > nano innkeepr-client-task.json
   - "image": Insert YOURAWS, e.g. YOURAWS=***AWSID.dkr.ecr.REGION.amazonaws.com/***
   - define your "awslogs-region", e.g. eu-central-1
   - STRG+X
   - Save -> Y
 
   Do the same for: 
-- innkeepr-client-task.json
-  > nano innkeepr-client-task.json
 - innkeepr-server-task.json
   > nano innkeepr-server-task.json
 
@@ -301,15 +293,10 @@ Run the script which will pull, push image, create clusters and create and run t
 > sudo sh client-aws-setup.sh $>client-aws-setup.out
 
 This script set up the pulls and push the necessary images and set up the clusters and the according tasks:
- - cluster: ecs-cluster-innkeepr-analyticsapi & task: innkeepr-analyticsapi
  - cluster: ecs-cluster-innkeepr-client & task: innkeepr-client
  - cluster: ecs-cluster-innkeepr-server & task: innkeepr-server
 
 ### Step 10: Set up security groups
- - innkeepr-analtycsapi Port 8001:
-   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 8001 --cidr ***cidr-address*** --region ***your-region***
-   - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
-
  - innkeepr-client:
     - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
     - Port 80:
@@ -325,7 +312,6 @@ This script set up the pulls and push the necessary images and set up the cluste
 
 ### Step 11: Now you can connect to API
 The ***Oeffentlicher IPv4-DNS*** can be found in the container instance of the task running in the certain cluster, e.g. for the innkeepr-client task: AWS console --> ECR --> Clusters --> ecs-cluster-innkeepr-client  --> Tab Task --> Container Instance --> Public DNS
-- innkeepr-analyticsapi: ***Oeffentlicher IPv4-DNS***:***PORT***/docs
 - innkeepr-client: ***Oeffentlicher IPv4-DNS***:80/docs
 
 ### Step 12: Stop clusters
