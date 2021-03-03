@@ -11,10 +11,18 @@ B. Ona an AWS ubunt system
 Install docker if not already installed:
 https://docs.docker.com/get-docker/ 
 
-### Step 2: Create keypair file
+###  Step 2: Set Up AWS
+#### Create keypair file
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
 
-Save the keypair file in the folder of aws-configuration-helper
+It is saved automatically normally in the download folder.
+Save the keypair file in the folder of aws-configuration-helper. 
+
+#### Set Up ecsTaskExecutionRole
+AWS --> IAM Role --> Create Role --> choose EC2
+- name: ecsTaskExecutionRole
+- Richtlinie: AmazonECSTaskExecutionRolePolicy 
+- Vertrauungsstellungen: ecs-tasks.amazonaws.com 
 
 ### Step 3: Allow the creation of logs in IAM Role
 1. go to IAM Roles and open Roles
@@ -48,6 +56,8 @@ Save the keypair file in the folder of aws-configuration-helper
 10. Suche nach der oben erstellen Richtlinie und füge sie an
 
 ### Step 4: Set up AWS
+For the next step you need the AWS Access Key and AWS Secret Access Key. If you do not already have them you can create them at AWS --> Click on the Arrow of your username --> choose Ihre Sicherheitsanmeldeinformationen --> go to Zugriffsschlüssel (Zugriffsschlüssel-ID und geheimer Zugriffsschlüssel) --> Neuen Zugriffsschlüssel erstellen. 
+
 If the AWS client, docker integration and amazon-ecr-credential-helper does not already exist run 
 > sh install-prerequisites.sh
 
@@ -134,9 +144,21 @@ The setup is saved here automatically, during setting it up choose the according
 Go to https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs: and create a keypair
 - name: innkeepr-keypair
 
-Save the keypair.
+It is saved automatically normally in the download folder. Save the keypair file in the folder of aws-configuration-helper. 
 
-#### Allow the creation of logs in IAM Role
+#### Set Up InnkeeprEcsInstanceRole:
+AWS --> IAM Role --> Create Role --> choose EC2
+- Richtlinie: AmazonEC2ContainerServiceforEC2Role 
+- Vertrauungsstellungen: ec2.amazonaws.com 
+- name: InnkeeprEcsInstanceRole
+
+#### Set Up ecsTaskExecutionRole
+AWS --> IAM Role --> Create Role --> choose EC2
+- name: ecsTaskExecutionRole
+- Richtlinie: AmazonECSTaskExecutionRolePolicy 
+- Vertrauungsstellungen: ecs-tasks.amazonaws.com 
+
+#### Allow the creation of logs in IAM Role ecsTaskExecutionRole
 1. go to IAM Roles and open Roles
 2. choose ecsTaskExecutionRole
 3. Richtlinie anfügen
@@ -222,9 +244,23 @@ Ausführlich: https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/putty.ht
 > cd aws-configuration-helper/
 
 - copy keypair file from your local machine to instance. YOURACCESS can be found in AWS --> EC2 --> Instance --> Choose the instance --> use Öffentlicher IPv4-DNS
+
+#### Linux
 > scp -i innkeepr-keypair.pem innkeepr-keypair.pem ubuntu@ec2-**YOURACCESS**.eu-central-1.compute.amazonaws.com:/home/ubuntu/aws-configuration-helper
 
+#### Windows
+- Install / Open FileZilla
+- Set up the server for ssh via Öffentlicher IPv4-DNS
+- choose authentification via Schlüsselparameter
+- Upload the innkeepr-policy-taks-role.ppk file
+- Save
+- Connect to Instance
+- Drag File to Instance folder aws-configuration-helper
+
 ### Step 5: Install prerequisites for AWS
+For the next step you need the AWS Access Key and AWS Secret Access Key. If you do not already have them you can create them at AWS --> Click on the Arrow of your username --> choose Ihre Sicherheitsanmeldeinformationen --> go to Zugriffsschlüssel (Zugriffsschlüssel-ID und geheimer Zugriffsschlüssel) --> Neuen Zugriffsschlüssel erstellen. 
+
+To install prerequisites run
 > sudo sh install-prerequisites.sh
 
 To enter during the process:
