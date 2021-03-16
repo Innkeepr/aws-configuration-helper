@@ -365,6 +365,16 @@ The setup is saved here automatically, during setting it up choose the according
         1. go to IAM ROles
         2. choose Cluster Role (see your EC2 --> instances --> IAM Role is listed here)
         3. add policy as in https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1
+- Error setting up cluster:
+  - "level=error msg="Failure event" reason="Template error: Fn::Select  cannot select nonexistent value at index 1" resourceType="AWS::EC2::Subnet"
+  
+  Solution see: https://github.com/widdix/aws-cf-templates/issues/37 
+    1. Check if subnets for other region exits at AWS --> VPC --> Subnets, here the regions are listed in the table
+    2. If not add them, e.g.
+    > sudo aws ec2 create-default-subnet --availability-zone eu-central-1b
+
+    > sudo aws ec2 create-default-subnet --availability-zone eu-central-1c
+
 
 
 
