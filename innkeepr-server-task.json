@@ -26,12 +26,8 @@
         "cpu": 2048,
         "environment": [
           {
-            "name": "ANALYTICS_URL",
-            "value": "http://localhost:8001/"
-          },
-          {
             "name": "API_URL",
-            "value": "https://innkeepr.pendix.de"
+            "value": "XXX"
           },
           {
             "name": "CLIENT_URL",
