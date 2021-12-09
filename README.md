@@ -16,15 +16,15 @@ AWS --> IAM Role --> Create Role --> choose EC2
 - Vertrauungsstellungen: ec2.amazonaws.com 
 - name: InnkeeprEcsInstanceRole
 
-#### Set Up ecsTaskExecutionRole
+#### Set Up InnkeeprEcsTaskExecutionRole
 AWS --> IAM Role --> Create Role --> choose EC2
-- name: ecsTaskExecutionRole
-- Richtlinie: AmazonECSTaskExecutionRolePolicy 
+- name: InnkeeprEcsTaskExecutionRole
+- Richtlinie: AmazonInnkeeprEcsTaskExecutionRolePolicy 
 - Vertrauungsstellungen: ecs-tasks.amazonaws.com 
 
-#### Allow the creation of logs in IAM Role ecsTaskExecutionRole
+#### Allow the creation of logs in IAM Role InnkeeprEcsTaskExecutionRole
 1. go to IAM Roles and open Roles
-2. choose ecsTaskExecutionRole
+2. choose InnkeeprEcsTaskExecutionRole
 3. Richtlinie anfügen
 4. Richtlinie erstellen (Details see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1)
 5. Open Tab Json and insert
@@ -49,7 +49,7 @@ AWS --> IAM Role --> Create Role --> choose EC2
 ```
 6. Name, e.g. **innkeepr-policy-taks-role**
 7. Richtlinie erstellen
-8. Öffne wieder ecsTaskExecutionRole
+8. Öffne wieder InnkeeprEcsTaskExecutionRole
 9. Klicke auf Richtlinie anfügen
 10. Suche nach der oben erstellen Richtlinie und füge sie an
 
