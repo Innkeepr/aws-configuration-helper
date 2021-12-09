@@ -8,19 +8,19 @@ Steps to set up Innkeepr Sever, Client and AnaltyicsAPI on AWS. There are two wa
 Go to https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs: and create a keypair
 - name: innkeepr-keypair
 
-It is saved automatically normally in the download folder. Save the keypair file in the folder of aws-configuration-helper. 
+It is saved automatically normally in the download folder. Save the keypair file in the folder of aws-configuration-helper.
 
 #### Set Up InnkeeprEcsInstanceRole:
 AWS --> IAM Role --> Create Role --> choose EC2
-- Richtlinie: AmazonEC2ContainerServiceforEC2Role 
-- Vertrauungsstellungen: ec2.amazonaws.com 
+- Richtlinie: AmazonEC2ContainerServiceforEC2Role
+- Vertrauungsstellungen: ec2.amazonaws.com
 - name: InnkeeprEcsInstanceRole
 
 #### Set Up InnkeeprEcsTaskExecutionRole
 AWS --> IAM Role --> Create Role --> choose EC2
 - name: InnkeeprEcsTaskExecutionRole
-- Richtlinie: AmazonInnkeeprEcsTaskExecutionRolePolicy 
-- Vertrauungsstellungen: ecs-tasks.amazonaws.com 
+- Richtlinie: AmazonInnkeeprEcsTaskExecutionRolePolicy
+- Vertrauungsstellungen: ecs-tasks.amazonaws.com
 
 #### Allow the creation of logs in IAM Role InnkeeprEcsTaskExecutionRole
 1. go to IAM Roles and open Roles
@@ -92,12 +92,12 @@ AWS --> IAM Role --> Create Role --> choose EC2
     - Connection type: SSH
     - Saved Session: Innkeepr → Save
   - Extend Connection → SSH -> Choose Auth → Browse
-    - Select ppk file 
+    - Select ppk file
   - Click on Open
   - Putty Security Alert → Choose yes
   - In Terminal login as: ubuntu
 
-Ausführlich: https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/putty.html 
+Ausführlich: https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/putty.html
 
 ***Now you should be on your AWS Instance. The next steps has to be executed on this instance***
 
@@ -122,10 +122,10 @@ Ausführlich: https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/putty.ht
 - Drag File to Instance folder aws-configuration-helper
 
 ### Step 5: Install prerequisites for AWS
-For the next step you need the AWS Access Key and AWS Secret Access Key. If you do not already have them you can create them at AWS --> Click on the Arrow of your username --> choose Ihre Sicherheitsanmeldeinformationen --> go to Zugriffsschlüssel (Zugriffsschlüssel-ID und geheimer Zugriffsschlüssel) --> Neuen Zugriffsschlüssel erstellen. 
+For the next step you need the AWS Access Key and AWS Secret Access Key. If you do not already have them you can create them at AWS --> Click on the Arrow of your username --> choose Ihre Sicherheitsanmeldeinformationen --> go to Zugriffsschlüssel (Zugriffsschlüssel-ID und geheimer Zugriffsschlüssel) --> Neuen Zugriffsschlüssel erstellen.
 
 To install prerequisites run
-> sudo sh install-prerequisites.sh
+> sh install-prerequisites.sh
 
 To enter during the process:
 1. [sudo] Passort fuer username: Enter your sudo password
@@ -135,12 +135,13 @@ To enter during the process:
   - Default region name: enter your region, e.g. eu-central-1
   - Default output format [json]: json
 3. Create Docker Context
-  - Choose "An Existing AWS Profile"
+  - Choose "An Existing AWS Profile" or "AWS secret and token credentials" if first does not exist
+    - if AWS secret and token credentials: enter your access keys and the region
   - default
-  
+
 ### Step 6: Set up Docker Credentials
-Open docker config file: 
-- > cat ~/.docker/config.json 
+Open docker config file:
+- > cat ~/.docker/config.json
 
 If the file does not exist , create the file
 - > touch ~/.docker/config.json
@@ -156,7 +157,7 @@ Insert the json script to the ~/.docker/config.json file & save it:
 {
     "credHelpers": {
 		"663925627205.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
-	},
+	}
 }
 ```
 - STRG+X --> save Yes
@@ -172,7 +173,7 @@ Preparation:
 
     - include your AWSid at the top: INSERT_YOUR_AWS
     - define your AWS region: INSERT_YOUR_REGION
-    - define your AWS keypair file (which your created above): INSERT_YOUR_KEYPAIR 
+    - define your AWS keypair file (which your created above): INSERT_YOUR_KEYPAIR
 - innkeepr-client-task.json
   > nano innkeepr-client-task.json
   - "image": Insert YOURAWS (accout number), e.g. YOURAWS=***AWSID***
@@ -180,7 +181,7 @@ Preparation:
   - STRG+X
   - Save -> Y
 
-  Do the same for: 
+  Do the same for:
 - innkeepr-server-task.json
   > nano innkeepr-server-task.json
 
@@ -196,19 +197,19 @@ This script set up the pulls and push the necessary images and set up the cluste
 ### Step 10: Set up security groups
  - innkeepr-client:
     - for testing use ***--cidr 0.0.0.0/0***, but keep in mind that it is open for everyone
-    - Port 80:
+    - Port 80: typ HTTP
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 80 --cidr ***cidr-address*** --region ***your-region***
-    - Port 443:
+    - Port 443: typ HTTPS
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 443 --cidr ***cidr-address*** --region ***your-region***
    - Port 4200
-   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 4200 --cidr ***cidr-address*** --region ***your-region*** 
+   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 4200 --cidr ***cidr-address*** --region ***your-region***
 
  - innkeepr-server
-    - Port 80:
+    - Port 80: typ: HTTP
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 80 --cidr ***cidr-address*** --region ***your-region***
     - Ports 3000-3443
    > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 3000-3443 --cidr ***cidr-address*** --region ***your-region***
-    - Ports 443
+    - Ports 443, typ: HTTPS
   > aws ec2 authorize-security-group-ingress --group-id sg-***security-id*** --protocol tcp --port 443 --cidr ***cidr-address*** --region ***your-region***
 
 ### Step 11: Now you can connect to API
@@ -232,8 +233,8 @@ The setup is saved here automatically, during setting it up choose the according
         3. add policy as in https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html#running-ec2-step-1
 - Error setting up cluster:
   - "level=error msg="Failure event" reason="Template error: Fn::Select  cannot select nonexistent value at index 1" resourceType="AWS::EC2::Subnet"
-  
-  Solution see: https://github.com/widdix/aws-cf-templates/issues/37 
+
+  Solution see: https://github.com/widdix/aws-cf-templates/issues/37
     1. Check if subnets for other region exits at AWS --> VPC --> Subnets, here the regions are listed in the table
     2. If not add them, e.g.
     > sudo aws ec2 create-default-subnet --availability-zone eu-central-1b
