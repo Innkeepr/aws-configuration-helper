@@ -1,0 +1,42 @@
+{
+    "executionRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/innkeepr-proxy-logs",
+            "awslogs-region": "eu-central-1",
+            "awslogs-create-group": "true",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "protocol": "tcp",
+            "containerPort": 80
+          },
+          {
+            "hostPort": 443,
+            "protocol": "tcp",
+            "containerPort": 443
+          }
+        ],
+        "cpu": 2048,
+        "environment": [],
+        "memory": 1024,
+        "image": "YOURAWSID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy",
+        "hostname": "app.innkeepr.ai",
+        "name": "innkeepr-proxy"
+      }
+    ],
+    "memory": "2048",
+    "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "family": "innkeepr-proxy",
+    "requiresCompatibilities": [
+      "EC2"
+    ],
+    "networkMode": "bridge",
+    "cpu": "2048"
+  }
