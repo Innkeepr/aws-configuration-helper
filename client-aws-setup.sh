@@ -23,6 +23,8 @@ echo "Pull innkeepr-client"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client
 echo "Pull innkeepr-server"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server
+echo "Pull innkeepr-proxy"
+sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy
 
 # create repository on aws
 ##########################
@@ -30,6 +32,7 @@ echo "Creatre repsoitories"
 #aws ecr create-repository --repository-name innkeepr-analyticsapi
 aws ecr create-repository --repository-name innkeepr-client
 aws ecr create-repository --repository-name innkeepr-server
+aws ecr create-repository --repository-name innkeepr-proxy
 
 # tag and push image (server)
 ####################
@@ -43,6 +46,9 @@ docker push $AWS_ID/innkeepr-client:latest
 echo "Push Image: innkeepr-server"
 docker tag 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server $AWS_ID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server:latest
 docker push $AWS_ID/innkeepr-server:latest
+echo "Push Image: innkeepr-proxy"
+docker tag 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy $AWS_ID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy:latest
+docker push $AWS_ID/innkeepr-proxy:latest
 
 # create cluster
 ####################
@@ -52,6 +58,8 @@ echo "Create Cluster: innkeepr-client"
 ecs-cli up --force --capability-iam --instance-type t3.medium --image-id ami-0ebfeb0108c46be41 --launch-type EC2 --cluster ecs-cluster-innkeepr-client --region $ECS_REGION --keypair $KEYPAIR --port 22
 echo "Create Cluster: innkeepr-server"
 ecs-cli up --force --capability-iam --instance-type t3.medium --image-id ami-0ebfeb0108c46be41 --launch-type EC2 --cluster ecs-cluster-innkeepr-server --region $ECS_REGION --keypair $KEYPAIR --port 22
+echo "Create Cluster: innkeepr-proxy"
+ecs-cli up --force --capability-iam --instance-type t3.medium --image-id ami-0ebfeb0108c46be41 --launch-type EC2 --cluster ecs-cluster-innkeepr-proxy --region $ECS_REGION --keypair $KEYPAIR --port 22
 echo "Sleep for 60 seconds to create instances"
 sleep 60
 
@@ -63,6 +71,8 @@ echo "Create Task: cluster innkeepr-client"
 aws ecs register-task-definition --cli-input-json file://innkeepr-client-task.json
 echo "Create Task: cluster innkeepr-server"
 aws ecs register-task-definition --cli-input-json file://innkeepr-server-task.json
+echo "Create Task: cluster innkeepr-proxy"
+aws ecs register-task-definition --cli-input-json file://innkeepr-proxy-task.json
 
 
 # execute tasks in the according cluster
@@ -73,3 +83,5 @@ echo "Run Task: cluster innkeepr-client"
 aws ecs run-task --cluster ecs-cluster-innkeepr-client --task-definition innkeepr-client --count 1 --launch-type EC2
 echo "Run Task: cluster innkeepr-server"
 aws ecs run-task --cluster ecs-cluster-innkeepr-server --task-definition innkeepr-server --count 1 --launch-type EC2
+echo "Run Task: cluster innkeepr-proxy"
+aws ecs run-task --cluster ecs-cluster-innkeepr-proxy --task-definition innkeepr-proxy --count 1 --launch-type EC2
