@@ -5,7 +5,7 @@
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "/ecs/innkeepr-client-logs",
+            "awslogs-group": "/ecs/innkeepr-proxy-logs",
             "awslogs-region": "eu-central-1",
             "awslogs-create-group": "true",
             "awslogs-stream-prefix": "ecs"
@@ -23,37 +23,22 @@
             "containerPort": 443
           }
         ],
-        "cpu": 2048,
         "environment": [
           {
-            "name": "API_URL",
-            "value": "ec2-XXX.eu-central-1.compute.amazonaws.com"
-          },
-          {
-            "name": "CLIENT_URL",
-            "value": "ec2-XXX.eu-central-1.compute.amazonaws.com"
-          },
-          {
-            "name": "HTTP_PORT",
-            "value": ":80"
-          },
-          {
-            "name": "HTTPS_PORT",
-            "value": ":443"
+            "name": "DOPPLER_TOKEN",
+            "value": "xx"
           }
         ],
-        "memory": 1024,
-        "image": "YOURAWSID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client",
-        "hostname": "app.innkeepr.ai",
-        "name": "innkeepr-client"
+        "memory": 800,
+        "image": "YOURAWSID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy",
+        "name": "innkeepr-proxy"
       }
     ],
-    "memory": "2048",
+    "memory": "800",
     "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
-    "family": "innkeepr-client",
+    "family": "innkeepr-proxy",
     "requiresCompatibilities": [
       "EC2"
     ],
-    "networkMode": "bridge",
-    "cpu": "2048"
+    "networkMode": "bridge"
   }
