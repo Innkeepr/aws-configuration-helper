@@ -133,7 +133,7 @@ Got to: SNS (https://console.aws.amazon.com/sns/v3/home)
   - Topic: <customername>-aws-sns
 
 ## Set-up Logs for Load Balancer
-Go to S3 Bucket innkeer-analytics
+Go to S3 Bucket innkeepr-analytics-<customer>
 1. Create Folder: innkeepr-load-balancer-proxy
 2. Add Bucket Permissions:
 - for eu-central-1: may change arn:aws:iam::054676820928:root to your resource id (see: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html)
@@ -149,7 +149,7 @@ Go to S3 Bucket innkeer-analytics
                 "AWS": "arn:aws:iam::054676820928:root"
             },
             "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::innkeepr-analytics/innkeepr-load-balancer-proxy/AWSLogs/YOUR_AWS_ID/*"
+            "Resource": "arn:aws:s3:::innkeepr-analytics-customer/innkeepr-load-balancer-proxy/AWSLogs/YOUR_AWS_ID/*"
         },
         {
             "Sid": "AWSLogDeliveryWrite",
@@ -158,7 +158,7 @@ Go to S3 Bucket innkeer-analytics
                 "Service": "delivery.logs.amazonaws.com"
             },
             "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::innkeepr-analytics/innkeepr-load-balancer-proxy/AWSLogs/YOUR_AWS_ID/*",
+            "Resource": "arn:aws:s3:::innkeepr-analytics-customer/innkeepr-load-balancer-proxy/AWSLogs/YOUR_AWS_ID/*",
             "Condition": {
                 "StringEquals": {
                     "s3:x-amz-acl": "bucket-owner-full-control"
@@ -172,7 +172,7 @@ Go to S3 Bucket innkeer-analytics
                 "Service": "delivery.logs.amazonaws.com"
             },
             "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::innkeepr-analytics"
+            "Resource": "arn:aws:s3:::innkeepr-analytics-customer"
         }
     ]
 }
@@ -182,7 +182,7 @@ Got to EC2 --> Load Blancer
 1. Choose the Innkeepr Loadbalancer
 2. Edit Attributes
   - Activate Zugriffsprotokolle/Cloud Watch Logs
-  - S3-Speicherort s3://innkeepr-analytics/innkeepr-load-balancer-proxy
+  - S3-Speicherort s3://innkeepr-analytics-customer/innkeepr-load-balancer-proxy
 
 ## Handling Error Messages
 - Update instance: see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html
