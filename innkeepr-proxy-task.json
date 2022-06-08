@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -23,20 +23,23 @@
             "containerPort": 443
           }
         ],
-        "cpu": 2048,
-        "environment": [],
-        "memory": 1024,
+        "environment": [
+          {
+            "name": "DOPPLER_TOKEN",
+            "value": "xx"
+          }
+        ],
+        "memory": 800,
         "image": "YOURAWSID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy",
-        "hostname": "app.innkeepr.ai",
         "name": "innkeepr-proxy"
       }
     ],
-    "memory": "2048",
-    "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "memory": "800",
+    "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
+
     "family": "innkeepr-proxy",
     "requiresCompatibilities": [
       "EC2"
     ],
-    "networkMode": "bridge",
-    "cpu": "2048"
+    "networkMode": "bridge"
   }

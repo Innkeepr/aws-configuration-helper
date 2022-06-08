@@ -1,0 +1,121 @@
+{
+  "containerDefinitions": [
+      {
+          "name": "innkeepr-analytics-modeling",
+          "image": "YOURAWSID/innkeepr-analytics-modeling",
+          "essential": true,
+          "portMappings":[{
+              "containerPort":8001,
+              "hostPort":8001,
+              "protocol":"tcp"
+              }],
+          "environment": [
+              {
+                  "name": "ACQ_CONFIG",
+                  "value": "xx"
+                },
+                {
+                  "name": "ACQ_MODEL",
+                  "value": "xx"
+                },
+                {
+                  "name": "API_ANLYTICS_GET",
+                  "value": "api?analytics_get"
+                },
+                {
+                  "name": "API_ATTRIBUTION_LIFT",
+                  "value": "api?analytics_lift_store"
+                },
+                {
+                  "name": "API_ATTRIBUTION_LIFT_TO_COST",
+                  "value": "api?analytics_lift_to_cost_store"
+                },
+                {
+                  "name": "API_ATTRIBUTION_PROFILES_TARGET",
+                  "value": "api?profiles_target"
+                },
+                {
+                  "name": "API_ATTRIBUTION_STORE",
+                  "value": "api?analytics_attribution_store"
+                },
+                {
+                  "name": "API_CORE_MIXPANLE_TRACK",
+                  "value": "api?core_mixpanel_track"
+                },
+                {
+                  "name": "API_F1_SCORE",
+                  "value": "api?analytics_f1_store"
+                },
+                {
+                  "name": "API_PROFILES_TRACK",
+                  "value": "api?sources_googleAnalytics_track_track"
+                },
+                {
+                  "name": "ACCOUNT_ID_POST",
+                  "value": "xx"
+                },
+                {
+                  "name": "BUCKET",
+                  "value": "xx"
+                },
+                {
+                  "name": "CAMPAIGN",
+                  "value": "xx"
+                },
+                {
+                  "name": "CONFIG",
+                  "value": "xx"
+                },
+                {
+                  "name": "CUSTOMER_URL_GET",
+                  "value": "https://api.innkeepr.ai/"
+                },
+                {
+                  "name": "CUSTOMER_URL_POST",
+                  "value": "https://api.innkeepr.ai/"
+                },
+                {
+                  "name": "GOAL",
+                  "value": "xx"
+                },
+                {
+                  "name": "MODEL",
+                  "value": "xx"
+                },
+                {
+                  "name": "ACCOUNT_ID",
+                  "value": "xx"
+                },
+                {
+                  "name": "MONGOURL",
+                  "value": "xx"
+                },
+                {
+                  "name": "RET_CONFIG",
+                  "value": "xx"
+                },
+                {
+                  "name": "RET_MODEL",
+                  "value": "xx"
+                }
+          ],
+          "logConfiguration":{
+              "logDriver":"awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/innkeepr-analytics-modeling-logs",
+                  "awslogs-region": "YOURREGION",
+                  "awslogs-stream-prefix":"ecs",
+                  "awslogs-create-group": "true"
+                  }
+              }
+      }
+  ],
+  "family": "innkeepr-analytics-modeling",
+  "taskRoleArn":"InnkeeprAmazonECSTaskS3BucketRole",
+  "executionRoleArn":"InnkeeprAmazonECSTaskS3BucketRole",
+  "networkMode":"bridge",
+  "requiresCompatibilities":["EC2"],
+  "cpu":"8000",
+  "memory":"32000"
+
+}

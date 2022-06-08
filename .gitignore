@@ -5,3 +5,4 @@ awscliv2.zip
 *.pem
 aws/
 ecs-cli.asc
+customer*

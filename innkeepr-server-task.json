@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -53,7 +53,7 @@
       }
     ],
     "memory": "2048",
-    "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprEcsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
     "family": "innkeepr-server",
     "requiresCompatibilities": [
       "EC2"
