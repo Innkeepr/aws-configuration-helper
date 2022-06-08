@@ -23,6 +23,8 @@ echo "Pull innkeepr-analytics-modeling"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analytics-modeling
 echo "Pull innkeepr-client"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-client
+echo "Pull innkeepr-server"
+sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-server
 echo "Pull innkeepr-proxy"
 sudo docker pull 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-proxy
 
@@ -49,6 +51,7 @@ aws ecr get-login-password --region $ECS_REGION | sudo docker login --username A
 docker tag 663925627205.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analytics-modeling $AWS_ID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analytics-modeling:latest
 docker push $AWS_ID.dkr.ecr.eu-central-1.amazonaws.com/innkeepr-analytics-modeling:latest
 
+
 # create cluster
 ####################
 echo "Create Cluster: cluster innkeepr-analytics"
@@ -66,8 +69,8 @@ sleep 60
 aws ecs register-task-definition --cli-input-json file://innkeepr-analytics-modeling-task.json
 echo "Create Task: cluster innkeepr-client"
 aws ecs register-task-definition --cli-input-json file://innkeepr-client-task.json
-#echo "Create Task: cluster innkeepr-server"
-#aws ecs register-task-definition --cli-input-json file://innkeepr-server-task.json
+echo "Create Task: cluster innkeepr-server"
+aws ecs register-task-definition --cli-input-json file://innkeepr-server-task.json
 echo "Create Task: cluster innkeepr-proxy"
 aws ecs register-task-definition --cli-input-json file://innkeepr-proxy-task.json
 
@@ -82,3 +85,4 @@ aws ecs register-task-definition --cli-input-json file://innkeepr-proxy-task.jso
 #aws ecs run-task --cluster ecs-cluster-innkeepr-server --task-definition innkeepr-server --count 1 --launch-type EC2
 #echo "Run Task: cluster innkeepr-proxy"
 #aws ecs run-task --cluster ecs-cluster-innkeepr-proxy --task-definition innkeepr-proxy --count 1 --launch-type EC2
+

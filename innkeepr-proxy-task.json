@@ -36,6 +36,7 @@
     ],
     "memory": "800",
     "taskRoleArn": "arn:aws:iam::YOURAWSID:role/InnkeeprAmazonECSTaskS3BucketRole",
+
     "family": "innkeepr-proxy",
     "requiresCompatibilities": [
       "EC2"
