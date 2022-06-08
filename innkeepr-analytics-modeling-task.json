@@ -51,11 +51,7 @@
                   "value": "api?sources_googleAnalytics_track_track"
                 },
                 {
-                  "name": "APIKEY_POST",
-                  "value": "xx"
-                },
-                {
-                  "name": "APIKEY_PROD",
+                  "name": "ACCOUNT_ID_POST",
                   "value": "xx"
                 },
                 {
@@ -87,7 +83,7 @@
                   "value": "xx"
                 },
                 {
-                  "name": "MONGOCOLLECTION",
+                  "name": "ACCOUNT_ID",
                   "value": "xx"
                 },
                 {
